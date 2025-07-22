@@ -1,7 +1,7 @@
 # DW_homework4
 ดวงตะวัน สิ่งส่า 65114540215
 
-*a. เขียนวิธีการติดตั้งและเปิดใช้งาน clickhouse
+*a. เขียนวิธีการติดตั้งและเปิดใช้งาน clickhouse*
 
 ของผมใช้ clickhouse ผ่าน docker รันคำสั่งเรียก image สร้าง containner มาใช้
 
@@ -14,8 +14,10 @@ docker run -d --name clickhouse-server \
 
 
  docker exec -it clickhouse-server clickhouse-client
+
  
-*b. เขียนวิธีนำเข้าข้อมูลจากการบ้านที่ 4. (HW04)
+ 
+*b. เขียนวิธีนำเข้าข้อมูลจากการบ้านที่ 4. (HW04)*
 
 *1.ใช้งานผ่าน ubantu
 
@@ -61,7 +63,10 @@ clickhouse-client --host=127.0.0.1 --query "INSERT INTO date FORMAT CSV" < date.
 
 *7.แก้ view แก้  url  สร้าง template  runserver เสร็จสิ้น
 
-*c. เขียนวิธีการติดตั้งและเปิดใช้งาน superset
+
+
+
+*c. เขียนวิธีการติดตั้งและเปิดใช้งาน superset*
 
 เข้าไปที่เว็บไซต์ superset documentation ในหัวข้อ quickstart 
 
@@ -76,7 +81,10 @@ docker compose -f docker-compose-image-tag.yml up
 username: admin
 password: admin
 
-*d. เขียนวิธีการเชื่อม superset กับ clickhouse
+
+
+
+*d. เขียนวิธีการเชื่อม superset กับ clickhouse*
 
 เราเข้าไปใน superset เพื่อเชื่อมกับ clickhouse  เช็คชื่อ container แล้วเข้าไปใน container superset
 
@@ -94,11 +102,18 @@ docker restart superset_app
 
 จากนั้นให้ใส่ข้อมูล client  ของเรา แล้วเชื่อม กับ database แล้วก็จะเสร็จสิ้น
 
-*e. เขียนวิธีการนำเสนอข้อมูลจากข้อมูล b. บน dashboard ของ superset พร้อมผลลัพธ์
+
+
+
+
+*e. เขียนวิธีการนำเสนอข้อมูลจากข้อมูล b. บน dashboard ของ superset พร้อมผลลัพธ์*
 
 กดเข้าไปที่ dataset ที่เราโหลดมาจาก clickhouse  สร้าง chart ที่ต้องการ ผลลัพธ์ก็จะออกมา เช่น bar area แล้วก็ save
 
-*f. เขียนบทสรุปการใช้งาน
+
+
+
+*f. เขียนบทสรุปการใช้งาน*
 
 เป็นการทำใช้ clickhouse มาเก็บข้อมูลผ่าน docker เราต้องเชื่อม clickhouse กับ docker เพื่ออย่างน้อยให้ table ใน clickhouse แล้วมีการใช้ superset  เพื่อนำข้อมูลจาก clickhouse มานำมาทำ dashborad ที่เราต้องการ ส่วนมากจะเป็นการเชื่อมข้อมูล  
 
