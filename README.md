@@ -16,6 +16,10 @@ docker run -d --name clickhouse-server \
  docker exec -it clickhouse-server clickhouse-client
 
  
+
+
+
+
  
 *b. เขียนวิธีนำเข้าข้อมูลจากการบ้านที่ 4. (HW04)*
 
@@ -66,6 +70,9 @@ clickhouse-client --host=127.0.0.1 --query "INSERT INTO date FORMAT CSV" < date.
 
 
 
+
+
+
 *c. เขียนวิธีการติดตั้งและเปิดใช้งาน superset*
 
 เข้าไปที่เว็บไซต์ superset documentation ในหัวข้อ quickstart 
@@ -80,6 +87,10 @@ docker compose -f docker-compose-image-tag.yml up
 
 username: admin
 password: admin
+
+
+
+
 
 
 
@@ -106,9 +117,15 @@ docker restart superset_app
 
 
 
+
+
+
 *e. เขียนวิธีการนำเสนอข้อมูลจากข้อมูล b. บน dashboard ของ superset พร้อมผลลัพธ์*
 
 กดเข้าไปที่ dataset ที่เราโหลดมาจาก clickhouse  สร้าง chart ที่ต้องการ ผลลัพธ์ก็จะออกมา เช่น bar area แล้วก็ save
+
+
+
 
 
 
