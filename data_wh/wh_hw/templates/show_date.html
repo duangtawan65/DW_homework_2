@@ -1,0 +1,35 @@
+<!-- วิธีที่ 1: แก้ Template โดยใช้ forloop (ง่ายที่สุด) -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Date Table</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 p-6">
+
+    <h2 class="text-2xl font-bold mb-4 text-center">📅 Date Table (100 rows)</h2>
+
+    <div class="overflow-x-auto">
+        <table class="min-w-full bg-white shadow rounded-lg text-sm">
+            <thead class="bg-gray-200 text-gray-600 uppercase text-xs">
+                <tr>
+                    {% for col in columns %}
+                        <th class="py-2 px-4 border-b">{{ col }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                    <tr class="hover:bg-gray-100">
+                        {% for value in row %}
+                            <td class="py-2 px-4 border-b">{{ value }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
