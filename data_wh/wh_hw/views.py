@@ -20,3 +20,6 @@ def show_date_table(request):
     rows = result
 
     return render(request, 'show_date.html', {'rows': rows, 'columns': columns})
+
+def readme(request):
+    return render(request, 'readme.html')

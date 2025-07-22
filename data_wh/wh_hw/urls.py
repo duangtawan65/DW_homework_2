@@ -2,5 +2,6 @@ from django.urls import path, include
 from .views import *
 
 urlpatterns = [
-    path('', show_date_table),
+    path('', readme),
+    #path('', show_date_table),
 ]

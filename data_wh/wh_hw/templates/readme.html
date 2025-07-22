@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DW_homework5 - ClickHouse & Superset</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .header h1 {
+            color: #4a5568;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .student-info {
+            background: rgba(103, 126, 234, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .student-info h2 {
+            color: #4a5568;
+            font-size: 1.2rem;
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .section-title {
+            color: #4a5568;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-icon {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .code-block {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .command {
+            color: #68d391;
+        }
+
+        .comment {
+            color: #a0aec0;
+            font-style: italic;
+        }
+
+        .step-container {
+            margin: 20px 0;
+        }
+
+        .step {
+            background: linear-gradient(90deg, rgba(103, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            padding: 15px;
+            border-radius: 10px;
+            margin: 10px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .step-number {
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .warning {
+            background: rgba(237, 137, 54, 0.1);
+            border-left: 4px solid #ed8936;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+        }
+
+        .warning-title {
+            color: #ed8936;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #a8edea 0%, #fed6e3 100%);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .footer {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .summary-box {
+            background: linear-gradient(135deg, rgba(103, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid rgba(103, 126, 234, 0.3);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header Section -->
+        <div class="header">
+            <h1>DW_homework5</h1>
+            <div class="student-info">
+                <h2>ดวงตะวัน สิ่งส่า 65114540215</h2>
+                <p>ClickHouse & Apache Superset Integration</p>
+            </div>
+        </div>
+
+        <!-- Section A: ClickHouse Installation -->
+        <div class="content-section">
+            <h2 class="section-title">
+                <span class="section-icon">A</span>
+                วิธีการติดตั้งและเปิดใช้งาน ClickHouse
+            </h2>
+
+            <div class="step-container">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>ติดตั้ง ClickHouse ผ่าน Docker</strong>
+                    <p>ใช้ Docker เพื่อรัน ClickHouse Server ผ่านคำสั่งต่อไปนี้:</p>
+                </div>
+
+                <div class="code-block">
+<span class="command">docker run -d --name clickhouse-server \
+  -p 8123:8123 -p 9000:9000 \
+  yandex/clickhouse-server</span>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>เชื่อมต่อ ClickHouse Client</strong>
+                    <p>เข้าใช้งาน ClickHouse Client ผ่านคำสั่ง:</p>
+                </div>
+
+                <div class="code-block">
+<span class="command">docker exec -it clickhouse-server clickhouse-client</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section B: Data Import -->
+        <div class="content-section">
+            <h2 class="section-title">
+                <span class="section-icon">B</span>
+                วิธีนำเข้าข้อมูลจากการบ้านที่ 4 (HW04)
+            </h2>
+
+            <div class="step-container">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>Clone และ Build SSB-DBGEN บน Ubuntu</strong>
+                </div>
+
+                <div class="code-block">
+<span class="command">git clone https://github.com/vadimtk/ssb-dbgen.git
+cd ssb-dbgen
+make</span>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>Generate ข้อมูล (เฉพาะ Date Table)</strong>
+                    <p>สร้างไฟล์ข้อมูลสำหรับแต่ละตาราง:</p>
+                </div>
+
+                <div class="code-block">
+<span class="command">./dbgen -s 1000 -T c  <span class="comment"># Customer</span>
+./dbgen -s 1000 -T l  <span class="comment"># LineOrder</span>
+./dbgen -s 1000 -T p  <span class="comment"># Part</span>
+./dbgen -s 1000 -T s  <span class="comment"># Supplier</span>
+./dbgen -s 1000 -T d  <span class="comment"># Date</span></span>
+                </div>
+
+                <div class="warning">
+                    <div class="warning-title">⚠️ ข้อจำกัด</div>
+                    <p>สามารถ generate ได้เฉพาะ Date Table เท่านั้น เนื่องจากไฟล์อื่นมีขนาดใหญ่เกินไป</p>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <strong>สร้าง Tables ใน ClickHouse</strong>
+                </div>
+
+                <div class="code-block">
+<span class="command">CREATE TABLE customer (...);
+CREATE TABLE lineorder (...);
+CREATE TABLE part (...);
+CREATE TABLE supplier (...);
+CREATE TABLE date (...);</span>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <strong>แปลงไฟล์ .tbl เป็น .csv</strong>
+                </div>
+
+                <div class="code-block">
+<span class="command">sed 's/|$//' customer.tbl | sed 's/|/,/g' > customer.csv</span>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">5</span>
+                    <strong>แก้ไขปัญหาข้อมูล</strong>
+                    <p>แก้ไขปัญหาต่อไปนี้:</p>
+                    <ul style="margin-left: 40px; margin-top: 10px;">
+                        <li>ลบ "" ที่ทำให้ insert ไม่ได้</li>
+                        <li>แก้ชื่อเดือนที่เขียนผิด: <span class="highlight">Augest → August</span>, <span class="highlight">Octorber → October</span></li>
+                    </ul>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">6</span>
+                    <strong>Import ข้อมูลเข้า ClickHouse</strong>
+                </div>
+
+                <div class="code-block">
+<span class="command">clickhouse-client --host=127.0.0.1 --query "INSERT INTO date FORMAT CSV" < date.csv</span>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">7</span>
+                    <strong>สร้าง Web Interface</strong>
+                    <p>แก้ไข view, URL และสร้าง template จากนั้น run server เสร็จสิ้น</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section C: Superset Installation -->
+        <div class="content-section">
+            <h2 class="section-title">
+                <span class="section-icon">C</span>
+                วิธีการติดตั้งและเปิดใช้งาน Apache Superset
+            </h2>
+
+            <div class="step-container">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>Clone Superset Repository</strong>
+                    <p>ดาวน์โหลด Apache Superset จาก GitHub (tag 5.0.0)</p>
+                </div>
+
+                <div class="code-block">
+<span class="command">git clone https://github.com/apache/superset -b 5.0.0
+cd superset</span>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>รัน Superset ผ่าน Docker Compose</strong>
+                </div>
+
+                <div class="code-block">
+<span class="command">docker compose -f docker-compose-image-tag.yml up</span>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <strong>เข้าใช้งาน Superset</strong>
+                    <p>เปิดเบราว์เซอร์และไปที่ <span class="highlight">http://localhost:8088</span></p>
+                    <div style="margin-top: 10px;">
+                        <strong>ข้อมูลการเข้าใช้งาน:</strong><br>
+                        Username: <span class="highlight">admin</span><br>
+                        Password: <span class="highlight">admin</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section D: Superset + ClickHouse Connection -->
+        <div class="content-section">
+            <h2 class="section-title">
+                <span class="section-icon">D</span>
+                วิธีการเชื่อม Superset กับ ClickHouse
+            </h2>
+
+            <div class="step-container">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>เข้าสู่ Superset Container</strong>
+                    <p>ตรวจสอบและเข้าใช้งาน Superset container</p>
+                </div>
+
+                <div class="code-block">
+<span class="command">docker ps
+docker exec -it superset_app bash</span>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>ติดตั้ง ClickHouse Connector</strong>
+                </div>
+
+                <div class="code-block">
+<span class="command">pip install clickhouse-connect
+exit</span>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <strong>Restart Superset</strong>
+                </div>
+
+                <div class="code-block">
+<span class="command">docker restart superset_app</span>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <strong>เชื่อมต่อ Database ใน Superset</strong>
+                    <p>ใน Superset Dashboard:</p>
+                    <ul style="margin-left: 40px; margin-top: 10px;">
+                        <li>กดปุ่ม <span class="highlight">+</span> ที่มุมขวาบน</li>
+                        <li>เลือก <span class="highlight">Data</span> → <span class="highlight">Create Dataset</span></li>
+                        <li>เลือก <span class="highlight">ClickHouse</span> จาก dropdown</li>
+                        <li>ใส่ข้อมูล client ของเราและเชื่อมต่อกับ database</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section E: Data Visualization -->
+        <div class="content-section">
+            <h2 class="section-title">
+                <span class="section-icon">E</span>
+                การนำเสนอข้อมูลบน Superset Dashboard
+            </h2>
+
+            <div class="step-container">
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>สร้าง Charts</strong>
+                    <p>เข้าไปที่ Dataset ที่โหลดมาจาก ClickHouse</p>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>เลือกรูปแบบการแสดงผล</strong>
+                    <p>สร้าง Chart ในรูปแบบต่างๆ เช่น:</p>
+                    <ul style="margin-left: 40px; margin-top: 10px;">
+                        <li><span class="highlight">Bar Chart</span> - แสดงข้อมูลเปรียบเทียบ</li>
+                        <li><span class="highlight">Area Chart</span> - แสดงแนวโน้มข้อมูล</li>
+                        <li><span class="highlight">Line Chart</span> - แสดงการเปลี่ยนแปลงตามเวลา</li>
+                    </ul>
+                </div>
+
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <strong>บันทึกและแสดงผล</strong>
+                    <p>Save Chart และดูผลลัพธ์ที่ได้บน Dashboard</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section F: Summary -->
+        <div class="content-section">
+            <h2 class="section-title">
+                <span class="section-icon">F</span>
+                บทสรุปการใช้งาน
+            </h2>
+
+            <div class="summary-box">
+                <h3 style="color: #4a5568; margin-bottom: 15px;">🎯 วัตถุประสงค์</h3>
+                <p>การใช้ <span class="highlight">ClickHouse</span> เป็น Data Warehouse สำหรับเก็บข้อมูลผ่าน Docker และใช้ <span class="highlight">Apache Superset</span> เป็นเครื่องมือในการสร้าง Dashboard และ Visualization</p>
+            </div>
+
+            <div class="summary-box">
+                <h3 style="color: #4a5568; margin-bottom: 15px;">⚙️ กระบวนการทำงาน</h3>
+                <p>เป็นการเชื่อมต่อระหว่าง ClickHouse กับ Superset เพื่อนำข้อมูลที่มีอยู่มาสร้างเป็น Dashboard ที่สามารถแสดงผลและวิเคราะห์ข้อมูลได้อย่างมีประสิทธิภาพ</p>
+            </div>
+
+            <div class="summary-box">
+                <h3 style="color: #4a5568; margin-bottom: 15px;">🔄 ขั้นตอนสำคัญ</h3>
+                <div style="background: white; padding: 15px; border-radius: 10px; margin-top: 10px;">
+                    <div style="display: flex; align-items: center; margin: 10px 0;">
+                        <div style="background: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">1</div>
+                        <span>สร้าง ClickHouse ผ่าน Docker</span>
+                    </div>
+                    <div style="display: flex; align-items: center; margin: 10px 0;">
+                        <div style="background: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">2</div>
+                        <span>โหลดและประมวลผลข้อมูลที่ได้</span>
+                    </div>
+                    <div style="display: flex; align-items: center; margin: 10px 0;">
+                        <div style="background: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">3</div>
+                        <span>นำข้อมูลไปสร้างใน ClickHouse</span>
+                    </div>
+                    <div style="display: flex; align-items: center; margin: 10px 0;">
+                        <div style="background: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">4</div>
+                        <span>เชื่อมต่อกับ Apache Superset</span>
+                    </div>
+                    <div style="display: flex; align-items: center; margin: 10px 0;">
+                        <div style="background: #667eea; color: white; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-weight: bold;">5</div>
+                        <span>สร้าง Dashboard และ Visualization</span>
+                    </div>
+                </div>
+            </div>
+    </div>
+</body>
+</html>
