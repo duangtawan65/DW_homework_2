@@ -22,4 +22,4 @@ def show_date_table(request):
     return render(request, 'show_date.html', {'rows': rows, 'columns': columns})
 
 def readme(request):
-    return render(request, 'readme.html')
+    return render(request, 'index.html')
